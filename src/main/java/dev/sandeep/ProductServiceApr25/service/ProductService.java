@@ -8,6 +8,7 @@ import dev.sandeep.ProductServiceApr25.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,9 +44,22 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public List<Product> getProductByDescription(String description){
+//        List<Product> products = productRepository.findAll();
+//        List<Product> matchedProducts = new ArrayList<>();
+//        for(Product product : products){
+//            if(product.getDescription().equals(description)){
+//                matchedProducts.add(product);
+//            }
+//        }
+//        return matchedProducts;
+        List<Product> matchedProducts = productRepository.findAllByDescriptionIgnoreCase(description);
+        return matchedProducts;
+    }
+
     public Product updateProduct(Product newProduct, int productId){
         Product savedProduct = getProduct(productId);
-        newProduct.setId(productId);
+        //newProduct.setId(productId);
         Product updatedProduct = productRepository.save(newProduct);
         return updatedProduct;
     }

@@ -1,0 +1,7 @@
+Ability to copy attributes and methods from parent class to child class,
+without actually writing those attributes and methods inside child class,
+is called Inheritance
+
+Parent-Child
+Base-Derived
+Super-Sub

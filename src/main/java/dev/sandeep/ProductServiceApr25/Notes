@@ -20,3 +20,14 @@ Spring ->
 RestTemplate -> becoming deprecated || today we will use RestTemplate
 WebClient -> latest
 
+---------------
+Product
+
+Category
+
+
+Product
+    Category category;
+
+Category
+    List<Product> products;

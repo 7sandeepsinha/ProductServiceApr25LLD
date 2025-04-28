@@ -27,10 +27,16 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/product/{id}") // localhost:8080/product/something
     public ResponseEntity<Product> getProductById(@PathVariable("id") int id){
         Product savedProduct = productService.getProduct(id);
         return ResponseEntity.ok(savedProduct);
+    }
+
+    @GetMapping("/product/desc/{description}") // localhost:8080/product/desc/something
+    public ResponseEntity<List<Product>> getProductByDescription(@PathVariable("description") String description){
+        List<Product> matchedProducts = productService.getProductByDescription(description);
+        return ResponseEntity.ok(matchedProducts);
     }
 
     @DeleteMapping("/product/{id}")
