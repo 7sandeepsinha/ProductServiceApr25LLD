@@ -1,6 +1,7 @@
 package dev.sandeep.ProductServiceApr25.controller;
 
 import dev.sandeep.ProductServiceApr25.dto.FakeStoreProductDTO;
+import dev.sandeep.ProductServiceApr25.dto.ProductProjection;
 import dev.sandeep.ProductServiceApr25.model.Product;
 import dev.sandeep.ProductServiceApr25.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,18 +11,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+//@RequestMapping("/v1/product") // every API on this controller would be /v1/API
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/product")
+    @PostMapping("/")
     public ResponseEntity<Product> createProduct(@RequestBody Product product){
         Product savedProduct = productService.saveProduct(product);
         return ResponseEntity.ok(savedProduct);
     }
 
-    @GetMapping("/product")
+    @GetMapping("/v1/product")
     public ResponseEntity<List<Product>> getAllProducts(){
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
@@ -37,6 +39,12 @@ public class ProductController {
     public ResponseEntity<List<Product>> getProductByDescription(@PathVariable("description") String description){
         List<Product> matchedProducts = productService.getProductByDescription(description);
         return ResponseEntity.ok(matchedProducts);
+    }
+
+    @GetMapping("/product/projection/{name}") // localhost:8080/product/desc/something
+    public ResponseEntity<ProductProjection> getProductProjectionByName(@PathVariable("name") String name){
+        ProductProjection projection = productService.getProductProjection(name);
+        return ResponseEntity.ok(projection);
     }
 
     @DeleteMapping("/product/{id}")
@@ -55,3 +63,6 @@ public class ProductController {
         return productService.getProductById(id);
     }
 }
+// break -> 10:08 PM
+// localhost:8080/ ---> all APIs
+// tunnelURL/api

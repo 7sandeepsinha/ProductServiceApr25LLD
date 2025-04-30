@@ -2,13 +2,14 @@ package dev.sandeep.ProductServiceApr25.service;
 
 import dev.sandeep.ProductServiceApr25.client.FakeStoreClient;
 import dev.sandeep.ProductServiceApr25.dto.FakeStoreProductDTO;
+import dev.sandeep.ProductServiceApr25.dto.ProductProjection;
+import dev.sandeep.ProductServiceApr25.exception.CategoryNotFoundException;
 import dev.sandeep.ProductServiceApr25.exception.ProductNotFoundException;
 import dev.sandeep.ProductServiceApr25.model.Product;
 import dev.sandeep.ProductServiceApr25.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,9 +60,13 @@ public class ProductService {
 
     public Product updateProduct(Product newProduct, int productId){
         Product savedProduct = getProduct(productId);
-        //newProduct.setId(productId);
+        newProduct.setPrice(100);
         Product updatedProduct = productRepository.save(newProduct);
         return updatedProduct;
+    }
+
+    public ProductProjection getProductProjection(String productName){
+        return productRepository.findFirstByName(productName);
     }
 
     public FakeStoreProductDTO[] getAllProductsFromFakeStore(){

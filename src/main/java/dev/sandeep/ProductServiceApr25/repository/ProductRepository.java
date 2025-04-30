@@ -1,7 +1,9 @@
 package dev.sandeep.ProductServiceApr25.repository;
 
+import dev.sandeep.ProductServiceApr25.dto.ProductProjection;
 import dev.sandeep.ProductServiceApr25.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,8 +13,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findAllByDescription(String description);
     List<Product> findAllByDescriptionIgnoreCase(String description);
     Product findFirstByDescriptionIgnoreCase(String description);
-
+    ProductProjection findFirstByName(String name);
+    ProductProjection findByNameAndDescription(String name, String description);
 }
+
 /*
     Extending JpaRepository adds all fundamental CRUD operation methods in ProductRepository interface
     we dont need to implement those methods, Spring Data JPA will do that for us

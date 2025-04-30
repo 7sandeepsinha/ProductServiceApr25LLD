@@ -2,22 +2,14 @@ package dev.sandeep.ProductServiceApr25.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 public class Product extends BaseModel {
-//    @ManyToOne
-//    private Category category;
     private double price;
     private double rating;
     private int quantity;
-
-//    public Category getCategory() {
-//        return category;
-//    }
-//
-//    public void setCategory(Category category) {
-//        this.category = category;
-//    }
 
     public double getPrice() {
         return price;
