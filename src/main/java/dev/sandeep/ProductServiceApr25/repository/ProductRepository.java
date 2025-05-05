@@ -1,6 +1,7 @@
 package dev.sandeep.ProductServiceApr25.repository;
 
 import dev.sandeep.ProductServiceApr25.dto.ProductProjection;
+import dev.sandeep.ProductServiceApr25.model.Category;
 import dev.sandeep.ProductServiceApr25.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

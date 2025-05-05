@@ -2,12 +2,14 @@ package dev.sandeep.ProductServiceApr25.controller;
 
 import dev.sandeep.ProductServiceApr25.dto.FakeStoreProductDTO;
 import dev.sandeep.ProductServiceApr25.dto.ProductProjection;
+import dev.sandeep.ProductServiceApr25.dto.ProductResponseDTO;
 import dev.sandeep.ProductServiceApr25.model.Product;
 import dev.sandeep.ProductServiceApr25.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,6 +18,22 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @GetMapping("/product/category/{id}")
+    public ResponseEntity<List<ProductResponseDTO>> getAllProductsByCategory(@PathVariable("id") int categoryId) {
+        List<Product> savedProducts = productService.getAllProductByCategoryId(categoryId);
+        List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
+        for (Product product : savedProducts) {
+            ProductResponseDTO responseDTO = new ProductResponseDTO(
+                    product.getName(),
+                    product.getDescription(),
+                    product.getPrice(),
+                    product.getRating()
+            );
+            productResponseDTOS.add(responseDTO);
+        }
+        return ResponseEntity.ok(productResponseDTOS);
+    }
 
     @PostMapping("/")
     public ResponseEntity<Product> createProduct(@RequestBody Product product){

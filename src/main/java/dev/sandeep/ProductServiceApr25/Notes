@@ -55,3 +55,21 @@ controller -> service -> ProductProjection[3]
 
 controller can again use a DTO -> return even smaller subset,
 ProductInfoDTO[2]
+
+
+------- Requirements for product service ------
+1. CRUD operations on Product
+2. CRUD operations on Category
+3. Get all products from Category API
+4. Get Category from Product API -- HOMEWORK
+5. Add Category to Product ==> updateProductApi()
+6. Remove category from Product
+7. Add product to category
+8. Remove product from category
+
+5-7 and 6-8 are essentially same at DB level, but can be perceived differently
+at an API level.
+
+
+
+BREAK => 8 mins -> 10:14 PM -> AWS
