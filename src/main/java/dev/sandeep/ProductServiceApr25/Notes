@@ -72,4 +72,15 @@ at an API level.
 
 
 
-BREAK => 8 mins -> 10:14 PM -> AWS
+Entity
+
+Product -> does not contain Category
+Category -> contains List<Product>
+
+First save the product, then add product to category, then save category
+
+DB
+Product table -> categoryID foreign key
+Category table -> does not contain any info
+
+

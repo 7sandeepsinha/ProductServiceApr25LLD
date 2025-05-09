@@ -3,8 +3,12 @@ package dev.sandeep.ProductServiceApr25.service;
 import dev.sandeep.ProductServiceApr25.client.FakeStoreClient;
 import dev.sandeep.ProductServiceApr25.dto.FakeStoreProductDTO;
 import dev.sandeep.ProductServiceApr25.dto.ProductProjection;
+import dev.sandeep.ProductServiceApr25.dto.ProductReqDTO;
+import dev.sandeep.ProductServiceApr25.exception.CategoryNotFoundException;
 import dev.sandeep.ProductServiceApr25.exception.ProductNotFoundException;
+import dev.sandeep.ProductServiceApr25.model.Category;
 import dev.sandeep.ProductServiceApr25.model.Product;
+import dev.sandeep.ProductServiceApr25.repository.CategoryRepository;
 import dev.sandeep.ProductServiceApr25.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,15 +24,24 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private CategoryService categoryService;
+    private CategoryRepository categoryRepository;
 
-    public List<Product> getAllProductByCategoryId(int categoryId){
-        List<Product> products = categoryService.getAllProductsByCategory(categoryId);
-        return products;
-    }
+    public Product saveProduct(ProductReqDTO productReqDTO) {
+        Category savedCategory = categoryRepository.findById(productReqDTO.getCategoryId()).orElseThrow(
+                () -> new CategoryNotFoundException("Category does not exist")
+        );
 
-    public Product saveProduct(Product product) {
+        Product product = new Product();
+        product.setName(productReqDTO.getName());
+        product.setDescription(productReqDTO.getDescription());
+        product.setPrice(productReqDTO.getPrice());
+        product.setQuantity(productReqDTO.getQuantity());
+        product.setRating(productReqDTO.getRating());
         Product savedProduct = productRepository.save(product);
+
+        savedCategory.getProducts().add(savedProduct);
+        categoryRepository.save(savedCategory);
+
         return savedProduct;
     }
 

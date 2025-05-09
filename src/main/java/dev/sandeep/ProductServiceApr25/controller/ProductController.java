@@ -2,6 +2,7 @@ package dev.sandeep.ProductServiceApr25.controller;
 
 import dev.sandeep.ProductServiceApr25.dto.FakeStoreProductDTO;
 import dev.sandeep.ProductServiceApr25.dto.ProductProjection;
+import dev.sandeep.ProductServiceApr25.dto.ProductReqDTO;
 import dev.sandeep.ProductServiceApr25.dto.ProductResponseDTO;
 import dev.sandeep.ProductServiceApr25.model.Product;
 import dev.sandeep.ProductServiceApr25.service.ProductService;
@@ -19,29 +20,13 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/product/category/{id}")
-    public ResponseEntity<List<ProductResponseDTO>> getAllProductsByCategory(@PathVariable("id") int categoryId) {
-        List<Product> savedProducts = productService.getAllProductByCategoryId(categoryId);
-        List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
-        for (Product product : savedProducts) {
-            ProductResponseDTO responseDTO = new ProductResponseDTO(
-                    product.getName(),
-                    product.getDescription(),
-                    product.getPrice(),
-                    product.getRating()
-            );
-            productResponseDTOS.add(responseDTO);
-        }
-        return ResponseEntity.ok(productResponseDTOS);
-    }
-
-    @PostMapping("/")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product){
-        Product savedProduct = productService.saveProduct(product);
+    @PostMapping("/product")
+    public ResponseEntity<Product> createProduct(@RequestBody ProductReqDTO productReqDTO){
+        Product savedProduct = productService.saveProduct(productReqDTO);
         return ResponseEntity.ok(savedProduct);
     }
 
-    @GetMapping("/v1/product")
+    @GetMapping("/product")
     public ResponseEntity<List<Product>> getAllProducts(){
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
