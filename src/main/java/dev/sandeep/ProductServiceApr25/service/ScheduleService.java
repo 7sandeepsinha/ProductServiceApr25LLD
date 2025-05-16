@@ -27,5 +27,7 @@ public class ScheduleService {
 }
 /*
     Cron format: second minute hour day month day-of-week
-       Example: "0 0 12 * * ?" → Every day at 12 PM
+    Example: "0 0 12 * * ?" → Every day at 12 PM
+
+    Break -> 8 mins -> 10:06 PM
  */

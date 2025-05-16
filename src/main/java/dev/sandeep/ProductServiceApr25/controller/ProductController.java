@@ -3,14 +3,14 @@ package dev.sandeep.ProductServiceApr25.controller;
 import dev.sandeep.ProductServiceApr25.dto.FakeStoreProductDTO;
 import dev.sandeep.ProductServiceApr25.dto.ProductProjection;
 import dev.sandeep.ProductServiceApr25.dto.ProductReqDTO;
-import dev.sandeep.ProductServiceApr25.dto.ProductResponseDTO;
+import dev.sandeep.ProductServiceApr25.dto.SortDTO;
 import dev.sandeep.ProductServiceApr25.model.Product;
 import dev.sandeep.ProductServiceApr25.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,7 +26,22 @@ public class ProductController {
         return ResponseEntity.ok(savedProduct);
     }
 
-    @GetMapping("/product")
+    @GetMapping("/all/product/{pageNumber}/{ascFilter}/{descFilter}")
+    public ResponseEntity<Page<Product>> getAllProducts(@PathVariable("pageNumber") int pageNumber,
+                                                        @PathVariable("ascFilter") String ascFilter,
+                                                        @PathVariable("descFilter") String descFilter ){
+        Page<Product> products = productService.getAllProductsPaginated(pageNumber, ascFilter, descFilter);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/all/product/{pageNumber}")
+    public ResponseEntity<Page<Product>> getAllProducts(@PathVariable("pageNumber") int pageNumber,
+                                                        @RequestBody List<SortDTO> sortDTOs){
+        Page<Product> products = productService.getAllProductsPaginated(pageNumber, sortDTOs);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/all/product")
     public ResponseEntity<List<Product>> getAllProducts(){
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);

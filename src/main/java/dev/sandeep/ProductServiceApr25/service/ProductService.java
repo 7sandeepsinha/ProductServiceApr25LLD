@@ -4,6 +4,7 @@ import dev.sandeep.ProductServiceApr25.client.FakeStoreClient;
 import dev.sandeep.ProductServiceApr25.dto.FakeStoreProductDTO;
 import dev.sandeep.ProductServiceApr25.dto.ProductProjection;
 import dev.sandeep.ProductServiceApr25.dto.ProductReqDTO;
+import dev.sandeep.ProductServiceApr25.dto.SortDTO;
 import dev.sandeep.ProductServiceApr25.exception.CategoryNotFoundException;
 import dev.sandeep.ProductServiceApr25.exception.ProductNotFoundException;
 import dev.sandeep.ProductServiceApr25.model.Category;
@@ -11,6 +12,9 @@ import dev.sandeep.ProductServiceApr25.model.Product;
 import dev.sandeep.ProductServiceApr25.repository.CategoryRepository;
 import dev.sandeep.ProductServiceApr25.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +62,18 @@ public class ProductService {
         } else {
             return productOptional.get();
         }
+    }
+
+    public Page<Product> getAllProductsPaginated(int pageNumber, String filterAsc, String filterDesc){
+        // Sort sort = Sort.by(parameter).ascen().and( Sort....).and(Sort....)
+        Sort sort = Sort.by(filterAsc).ascending().and(Sort.by(filterDesc).descending());
+        return productRepository.findAll(PageRequest.of(pageNumber, 3, sort));
+    }
+
+    public Page<Product> getAllProductsPaginated(int pageNumber, List<SortDTO> sortingDTO){
+        Sort sort = Sort.by("price").ascending().and(Sort.by("rating").descending());
+        //TODO : add the logic to sort based on the items inside sortingDTO
+        return productRepository.findAll(PageRequest.of(pageNumber, 3, sort));
     }
 
     public List<Product> getAllProducts(){
