@@ -1,6 +1,7 @@
 package dev.sandeep.ProductServiceApr25.service;
 
 import dev.sandeep.ProductServiceApr25.dto.CategoryRequestDTO;
+import dev.sandeep.ProductServiceApr25.exception.CategoryNotFoundException;
 import dev.sandeep.ProductServiceApr25.exception.DuplicateCategoryNameException;
 import dev.sandeep.ProductServiceApr25.model.Category;
 import dev.sandeep.ProductServiceApr25.model.Product;
@@ -95,6 +96,25 @@ public class CategoryServiceTest {
         Assertions.assertThrows(DuplicateCategoryNameException.class, () -> categoryService.createCategory(categoryRequestDTO));
         verify(categoryRepository).findByName("Home Appliances");
         verify(categoryRepository, never()).save(any(Category.class));
+    }
+
+    @Test
+    void getCategory_success(){
+        //setup
+        when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
+        // call
+        Category result = categoryService.getCategory(1);
+        //verifications
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(category.getId(), result.getId());
+        Assertions.assertEquals(category.getName(), result.getName());
+        Assertions.assertEquals(category.getDescription(), result.getDescription());
+    }
+
+    @Test
+    void getCategory_categoryNotFoundException(){
+        when(categoryRepository.findById(12345)).thenReturn(Optional.empty());
+        Assertions.assertThrows(CategoryNotFoundException.class, () -> categoryService.getCategory(12345));
     }
 
 
