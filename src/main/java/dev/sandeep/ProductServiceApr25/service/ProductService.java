@@ -30,6 +30,19 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    public boolean createNProducts(int n){
+        for(int i = 1; i <= n; i++){
+            Product product = new Product();
+            product.setName("Product " + i);
+            product.setDescription("Product Description " + i);
+            product.setPrice(100 * i + i);
+            product.setQuantity(i);
+            product.setRating(i * 0.05);
+            productRepository.save(product);
+        }
+        return true;
+    }
+
     public Product saveProduct(ProductReqDTO productReqDTO) {
         Category savedCategory = categoryRepository.findById(productReqDTO.getCategoryId()).orElseThrow(
                 () -> new CategoryNotFoundException("Category does not exist")
@@ -110,6 +123,13 @@ public class ProductService {
 
     public FakeStoreProductDTO getProductById(int productId){
         return fakeStoreClient.getProduct(productId);
+    }
+
+    public List<Product> getProductByCategoryId(int categoryId){
+        Category savedCategory = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new CategoryNotFoundException("Category does not exist")
+        );
+        return savedCategory.getProducts();
     }
 
 }

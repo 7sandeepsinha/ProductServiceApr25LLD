@@ -1,0 +1,104 @@
+package dev.sandeep.ProductServiceApr25.service;
+
+import dev.sandeep.ProductServiceApr25.dto.CategoryRequestDTO;
+import dev.sandeep.ProductServiceApr25.exception.DuplicateCategoryNameException;
+import dev.sandeep.ProductServiceApr25.model.Category;
+import dev.sandeep.ProductServiceApr25.model.Product;
+import dev.sandeep.ProductServiceApr25.repository.CategoryRepository;
+import io.micrometer.common.annotation.ValueExpressionResolver;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@ExtendWith(MockitoExtension.class)
+public class CategoryServiceTest {
+    @Mock
+    private CategoryRepository categoryRepository;
+    @Mock
+    private ProductService productService;
+
+    @InjectMocks
+    private CategoryService categoryService;
+
+    private Category category;
+    private Product product1;
+    private Product product2;
+
+    @BeforeEach // setUp method runs before each test
+    void setUp() {
+        category = new Category();
+        category.setId(1);
+        category.setName("Electronics");
+        category.setDescription("Electronic Items");
+
+        product1 = new Product();
+        product1.setId(101);
+        product1.setName("Phone");
+
+        product2 = new Product();
+        product2.setId(102);
+        product2.setName("Laptop");
+
+        ArrayList<Product> products = new ArrayList<>();
+        products.add(product1);
+        products.add(product2);
+        category.setProducts(products);
+    }
+
+    @Test
+    void createCategory_Success(){
+        //setup
+        //input creation
+        CategoryRequestDTO categoryRequestDTO = new CategoryRequestDTO("Home Appliances", "All appliances");
+        //mocking
+        when(categoryRepository.findByName("Home Appliances")).thenReturn(Optional.empty());
+        //object required creation
+        Category savedCategory = new Category();
+        savedCategory.setId(10);
+        savedCategory.setName("Home Appliances");
+        savedCategory.setDescription("All appliances");
+        //mocking
+        when(categoryRepository.save(any(Category.class))).thenReturn(savedCategory);
+
+        //call the actual method to test
+        Category result = categoryService.createCategory(categoryRequestDTO);
+
+        //verifications and tests
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(savedCategory.getId(), result.getId());
+        Assertions.assertEquals("Home Appliances", result.getName());
+        Assertions.assertEquals("All appliances", result.getDescription());
+        verify(categoryRepository).findByName("Home Appliances");
+        verify(categoryRepository).save(any(Category.class));
+    }
+
+    @Test
+    void createCategory_duplicateCategoryException(){
+        // setup
+        CategoryRequestDTO categoryRequestDTO = new CategoryRequestDTO("Home Appliances", "All appliances");
+        //mocking
+        Category savedCategory = new Category();
+        savedCategory.setId(10);
+        savedCategory.setName("Home Appliances");
+        savedCategory.setDescription("All appliances");
+        when(categoryRepository.findByName("Home Appliances")).thenReturn(Optional.of(savedCategory));
+
+        Assertions.assertThrows(DuplicateCategoryNameException.class, () -> categoryService.createCategory(categoryRequestDTO));
+        verify(categoryRepository).findByName("Home Appliances");
+        verify(categoryRepository, never()).save(any(Category.class));
+    }
+
+
+}
+/*
+
+ */

@@ -1,9 +1,6 @@
 package dev.sandeep.ProductServiceApr25.controller;
 
-import dev.sandeep.ProductServiceApr25.dto.FakeStoreProductDTO;
-import dev.sandeep.ProductServiceApr25.dto.ProductProjection;
-import dev.sandeep.ProductServiceApr25.dto.ProductReqDTO;
-import dev.sandeep.ProductServiceApr25.dto.SortDTO;
+import dev.sandeep.ProductServiceApr25.dto.*;
 import dev.sandeep.ProductServiceApr25.model.Product;
 import dev.sandeep.ProductServiceApr25.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,6 +17,11 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @PostMapping("/product/create/{n}")
+    public ResponseEntity<Boolean> createProduct(@PathVariable("n") Integer n) {
+        return ResponseEntity.ok(productService.createNProducts(n));
+    }
 
     @PostMapping("/product")
     public ResponseEntity<Product> createProduct(@RequestBody ProductReqDTO productReqDTO){
@@ -80,7 +83,21 @@ public class ProductController {
     public FakeStoreProductDTO getProductFromFakeStore(@PathVariable("id") int id) {
         return productService.getProductById(id);
     }
+
+//    @GetMapping("/product/category/{categoryId}")
+//    public ResponseEntity<List<ProductResponseDTO>> getProductByCategory(@PathVariable("categoryId") int categoryId) {
+//        List<Product> products = productService.getProductByCategoryId(categoryId);
+//        List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
+//        for (Product product : products) {
+//            ProductResponseDTO productResponseDTO = new ProductResponseDTO(
+//                    product.getName(),
+//                    product.getDescription(),
+//                    product.getPrice(),
+//                    product.getRating()
+//            );
+//            );
+//            productResponseDTOS.add(productResponseDTO);
+//        }
+//        return ResponseEntity.ok(productResponseDTOS);
+//    }
 }
-// break -> 10:08 PM
-// localhost:8080/ ---> all APIs
-// tunnelURL/api
