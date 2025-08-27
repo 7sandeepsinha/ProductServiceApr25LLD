@@ -57,6 +57,10 @@ public class CategoryService {
         return true;
     }
 
+    public int getProductsInCategory(int categoryId){
+        return 0;
+    }
+
 //    public Category getCategoryFromProduct(int productId){
 //        Product product = productService.getProduct(productId);
 //        Category category = categoryRepository.findByProductsIn(List.of(product)).orElseThrow(

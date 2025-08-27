@@ -117,8 +117,44 @@ public class CategoryServiceTest {
         Assertions.assertThrows(CategoryNotFoundException.class, () -> categoryService.getCategory(12345));
     }
 
+    @Test
+    void getProductsInCategory_success(){
+        //setup and mocking
+        int mockNoOfProducts = 10;
+
+        //actual call
+        int actualNoOfProducts = categoryService.getProductsInCategory(1);
+
+        //verifications
+        Assertions.assertEquals(mockNoOfProducts, actualNoOfProducts);
+
+    }
+
+    @Test
+    void getProductsInCategory_Success_NoProducts(){
+
+    }
+
+    @Test
+    void getProductsInCategory_CategoryNotFoundException(){
+
+    }
+
 
 }
 /*
-
+        Test for a particular class
+        1. Create a test class
+        2. @ExtendWith
+        3. Add dependencies -> autowired in actual class, @Mock in test class
+        4. @InjectMocks -> with actual class we want to test
+        5. Data creation -> @Before @BeforeEach
+        6. Destroy data, resources etc -> @After and @AfterEach
+        7. @Test -> test
+            a. Three parts -> setup / call / verify
+            b. Setup -> method input object creation and mocks
+                i. mocks -> for each mock -> input obj creation, output obj creation and mocking line
+            c. actual call
+            d. verifications -> assertions and verify
+        8. Run with coverage to test overall coverage
  */
